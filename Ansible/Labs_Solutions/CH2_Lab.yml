@@ -39,3 +39,41 @@
         interval: daily
         products:
           - 'Red Hat Enterprise Linux for x86_64'
+
+
+
+    - name: Create Build Lifecycle Environment
+      redhat.satellite.sync_plan:
+        name: Build
+        label: Build
+        prior: library
+        organization: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+
+    - name: Create Test Lifecycle Environment
+      redhat.satellite.sync_plan:
+        name: Test
+        label: Test
+        prior: Build
+        organization: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+
+    - name: Create Deploy Lifecycle Environment
+      redhat.satellite.sync_plan:
+        name: Deploy
+        label: Deploy
+        prior: Test
+        organization: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
