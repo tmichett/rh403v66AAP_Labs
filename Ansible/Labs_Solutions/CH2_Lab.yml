@@ -4,9 +4,6 @@
   vars_files: sat_vars.yml
   vars:
     org_name: Finance
-    org_locations:
-      - San Francisco
-      - Tokyo
     sat_repos:
       - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
       - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
@@ -88,5 +85,5 @@
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
         repositories:
-          - name: Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+          - name: Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8.1
             product: Red Hat Enterprise Linux for x86_64
