@@ -1,0 +1,30 @@
+---
+- name: Complete Chapter 1 Lab
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Finance
+    org_desc: Finance Department
+    org_locations:
+      - San Francisco
+      - Tokyo
+  tasks:
+    - name: Create Lab Organization
+      redhat.satellite.organization:
+        name: "{{ org_name }}"
+        description: "{{ org_desc }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+
+    - name: Create Lab Locations
+      redhat.satellite.location:
+        name: "{{ item }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+      loop: "{{ org_locations }}"
