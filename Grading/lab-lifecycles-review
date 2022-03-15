@@ -1,0 +1,307 @@
+#!/bin/bash
+#
+# Copyright 2019, 2020 Red Hat, Inc.
+#
+# NAME
+#     lab-lifecycles-review - grading script for RH403 Lab
+#                             Managing Software Life Cycles
+#
+# SYNOPSIS
+#     lab-lifecycles-review {start|grade|finish}
+#
+#        start   - prepare the system for starting the lab
+#        grade   - perform evaluation steps on the system
+#        finish  - perform post-lab cleanup
+#
+# DESCRIPTION
+#     This script, based on singular argument, either does start, grade, or
+#     finish for the Lab Managing Software Life Cycles.
+#
+# CHANGELOG
+#   * Tue Nov 10 2020 Herve Quatremain <hquatrem@redhat.com>
+#   - fixing location creation
+#   * Mon Sep 30 2019 Saumik Paul <saumik@redhat.com>
+#   - original code
+
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# Initialize and set some variables
+run_as_root='true'
+target='satellite'
+username='admin'
+password='redhat'
+orgname="Finance"
+locname1='San Francisco'
+locname1_for_grep='San Francisco'
+locname2="Tokyo"
+locname2_for_grep='Tokyo'
+manifest_loc="http://materials.example.com/manifest_finance.zip"
+manifest="/root/manifest_finance.zip"
+repo_url="http://content.example.com/rhs6.6/x86_64/cdn"
+sub_support='Standard'
+interval='daily'
+lifecycle_env1='Library'
+lifecycle_env2='Build'
+lifecycle_env3='Test'
+lifecycle_env4='Deploy'
+content_view='Base'
+content_view_repo_label='Red_Hat_Enterprise_Linux_8_for_x86_64_-_BaseOS_RPMs*'
+
+# This defines which subcommands are supported (start, grade, etc.).
+# Corresponding lab_COMMAND functions must be defined.
+declare -a valid_commands=(start grade finish)
+
+function check_hammer_config_file {
+  pad ' · Checking hammer config file'
+   if ! ${ssh} ${target} [ grep ${password} /root/.hammer/cli.modules.d/foreman.yml ]
+   then
+    ${ssh} ${target} "cat << EOF > /root/.hammer/cli.modules.d/foreman.yml
+:foreman:
+   :username: '${username}'
+   :password: '${password}'
+   :refersh_cache: false
+   :request_timeout: 120
+EOF" &&
+    print_SUCCESS
+  else
+    print_SUCCESS
+  fi
+}
+
+function install_jq {
+  pad ' · Installing the jq tool'
+  if ! rpm -q jq
+  then
+    yum install jq -y &&
+    print_SUCCESS
+  else
+    print_SUCCESS
+  fi
+}
+
+function create_satellite_org {
+  ## Organisations: check if organization exists, if not create
+  pad " · Checking organization: ${1}"
+  ORG_COUNT=$(${ssh} ${target} 'hammer --csv --csv-separator=" " organization list' | grep $1 | wc -l)
+  if [ "$ORG_COUNT" -ne 0 ]
+  then
+    print_SUCCESS
+  else
+    if ${ssh} ${target} hammer organization create --name "${1}" --label "${1}" --description "${1}"
+    then
+      print_SUCCESS
+    else
+      print_FAIL
+    fi
+  fi
+}
+
+function create_satellite_loc {
+  ## Location: check if location exists, if not create
+  pad " · Checking location: ${1}"
+  LOC_COUNT=$(${ssh} ${target} hammer --csv --csv-separator=" " location list | grep "${3}" | wc -l)
+  if [ "$LOC_COUNT" -gt 0 ]
+  then
+    print_SUCCESS
+  else
+    if ${ssh} ${target} "hammer location create --name '${1}'" &&
+       ${ssh} ${target} "hammer location add-organization --name '${1}' --organization '${2}'"
+    then
+      print_SUCCESS
+    else
+      print_FAIL
+    fi
+  fi
+}
+
+function download_satellite_manifest {
+  ## Manifests: Download subscription manifest
+  pad " · Download subscription manifest: ${1}"
+  if ${ssh} ${target} [ -f "${1}" ]
+  then
+    print_SUCCESS
+  else
+    if ${ssh} ${target} curl -o ${1} ${2}
+    then
+      print_SUCCESS
+    else
+      print_FAIL
+    fi
+  fi
+}
+
+function import_satellite_manifest {
+  # Download ${orgname} subscription manifest if it does not exist.
+  download_satellite_manifest ${manifest} ${manifest_loc}
+
+  ## Manifests: Import subscription manifest
+  pad " · Importing manifest: ${1}"
+  MF_COUNT=$(${ssh} ${target} hammer --no-headers subscription list --organization ${3} | grep ${sub_support} | wc -l)
+  if [ "$MF_COUNT" -eq 0 ]
+  then
+    if ${ssh} ${target} hammer subscription upload --file ${1} --repository-url ${2} --organization ${3}
+    then
+      print_SUCCESS
+    else
+      print_FAIL
+    fi
+  else
+    print_SUCCESS
+  fi
+}
+
+function verify_enabled_repositories {
+  pad " · Verifying enabled repositories"
+  APP_REPO_COUNT=$(${ssh} ${target} hammer --output json repository list --organization ${1} | jq -r '.[]|.Name' | grep "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs" | wc -l)
+  BASE_REPO_COUNT=$(${ssh} ${target} hammer --output json repository list --organization ${1} | jq -r '.[]|.Name' | grep "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs" | wc -l)
+  SAT_REPO_COUNT=$(${ssh} ${target} hammer --output json repository list --organization ${1} | jq -r '.[]|.Name' | grep "Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 RPMs" | wc -l)
+  if [ "$APP_REPO_COUNT" -ne 0 ] && [ "$BASE_REPO_COUNT" -ne 0 ] && [ "$SAT_REPO_COUNT" -ne 0 ]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+}
+
+function verify_sync_plan {
+  pad " · Verifying sync plan"
+  INTERVAL=$(${ssh} ${target} hammer --output json sync-plan list --organization ${1} | jq -r ".[] | select (.Name==\"Sync Plan for Red Hat Products\") | .Interval")
+  if [ "$INTERVAL" == "$2" ]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+}
+
+function verify_sync_plan_assignment {
+  pad " · Verifying sync plan assignment"
+  mapfile -t REPOS_ID < <(${ssh} ${target} hammer --output json repository  list --organization ${1} | jq -r ".[].Id")
+  REPO_PRODUCT_ID=$(for EACH_REPO_ID in ${REPOS_ID[@]}; do ${ssh} ${target} hammer --output json repository info --organization ${1} --id ${EACH_REPO_ID}; done | jq -r ".Product.ID" | uniq)
+  mapfile -t SYNC_PLANS_ID < <(${ssh} ${target} hammer --output json sync-plan list --organization ${1} | jq -r ".[] | select(.Name==\"Sync Plan for Red Hat Products\") | .ID")
+  SYNC_PLAN_PRODUCT_ID_COUNT=$(for EACH_SYNC_PLAN_ID in ${SYNC_PLANS_ID[@]}; do ${ssh} ${target} hammer --output json sync-plan info --organization ${1} --id ${EACH_SYNC_PLAN_ID}; done | jq -r ".Products" | grep $REPO_PRODUCT_ID | wc -l)
+
+  if [ "$SYNC_PLAN_PRODUCT_ID_COUNT" -ne 0 ]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+}
+
+function verify_lifecycle_environment {
+  pad " · Verifying lifecycle environment: ${2}"
+  LIB_ENV_PATH=$(${ssh} ${target} hammer --output json lifecycle-environment list --organization ${3} | jq -r ".[] | select (.Prior==\"${1}\")| .Name")
+  if [ "$LIB_ENV_PATH" == "$2" ]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+}
+
+function verify_content_view_repo {
+  pad " · Verifying content view repository: ${1}"
+  REPO_LABEL=$(${ssh} ${target} hammer --output json  content-view info --name ${1} --organization ${2} | jq -r '.["Yum Repositories"] | .[].Label')
+  if [[ $REPO_LABEL =~ $3 ]]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+}
+
+function verify_content_view_lifecycle_env {
+  pad " · Verifying content view lifecycle environment: ${1}"
+  CNT_VIEW_LIFE_ENV=$(${ssh} ${target} hammer --output json  content-view info --name ${1} --organization ${2} | jq -r '.["Lifecycle Environments"] | .[].Name' | grep ${3})
+  if [ "$CNT_VIEW_LIFE_ENV" == "$3" ]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+}
+
+
+function lab_start {
+
+  print_header 'Starting lab.'
+
+  print_line "Preparing ${target} for lab exercise work:"
+  print_line
+  host_reachable ${target}
+
+  # Check for satellite status.
+  if ${ssh} ${target} "satellite-maintain service status -f | grep FAIL"
+  then
+    pad " · Error - Some Satellite services are not running ${target}"
+    print_FAIL
+    exit 15
+  else
+    check_hammer_config_file
+  fi
+
+  install_jq
+  create_satellite_org ${orgname}
+  create_satellite_loc "${locname1}" ${orgname} "${locname1_for_grep}"
+  create_satellite_loc ${locname2} ${orgname} ${locname2_for_grep}
+  import_satellite_manifest ${manifest} ${repo_url} ${orgname}
+
+  print_line
+
+}
+
+function lab_grade {
+
+  print_header "Grading the student's work on ${target}:"
+  host_reachable ${target}
+
+  # Preparing for grading
+  print_header "Preparing for grading"
+  install_jq
+
+  # Grading Lab
+  print_header "Grading Lab"
+
+  verify_enabled_repositories ${orgname}
+  verify_sync_plan ${orgname} ${interval}
+  verify_sync_plan_assignment ${orgname}
+  verify_lifecycle_environment ${lifecycle_env1} ${lifecycle_env2} ${orgname}
+  verify_lifecycle_environment ${lifecycle_env2} ${lifecycle_env3} ${orgname}
+  verify_lifecycle_environment ${lifecycle_env3} ${lifecycle_env4} ${orgname}
+  verify_content_view_repo ${content_view} ${orgname} ${content_view_repo_label}
+  verify_content_view_lifecycle_env ${content_view} ${orgname} ${lifecycle_env2}
+
+  # Overall grade
+  print_line
+  pad 'Overall lab grade'
+  if [[ ${fail_count} -eq 0 ]]
+  then
+    print_PASS
+  else
+    print_FAIL
+  fi
+
+  print_line
+}
+
+function lab_finish {
+
+  print_header "Cleaning up the lab on ${target}:"
+  host_reachable ${target}
+
+  pad ' · Finish script in progress'
+  print_SUCCESS
+
+  print_line
+  print_line 'Lab finished.'
+  print_line
+}
+
+############### Don't EVER change anything below this line ###############
+
+# Source library of functions
+source /usr/local/lib/${function_lib}
+source /usr/local/lib/${platform_lib}
+
+grading_main_program "$@"
