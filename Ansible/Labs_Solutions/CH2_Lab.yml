@@ -1,0 +1,23 @@
+---
+- name: Complete Chapter 1 Lab
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Finance
+    org_locations:
+      - San Francisco
+      - Tokyo
+    sat_repos:
+      - Red Hat Enterprise Linux 8.1 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8.1 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+
+  tasks:
+    - name: Enable Repositories
+      redhat.satellite.repository_set:
+        name: "{{ sat_repos }}"
+        state: enabled
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
