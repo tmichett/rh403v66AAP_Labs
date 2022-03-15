@@ -22,9 +22,21 @@
     - name: Create Lab Locations
       redhat.satellite.location:
         name: "{{ item }}"
+        organizations: "{{ org_name }}"
         state: present
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
       loop: "{{ org_locations }}"
+
+    - name: Upload Manifest
+      redhat.satellite.subscription_manifest:
+        name: "{{ item }}"
+        organizations: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        manifest_path: "http://materials/manifest_finance.zip"
