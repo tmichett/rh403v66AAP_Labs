@@ -1,9 +1,9 @@
 - name: Test Satellite
   hosts: localhost
   tasks:
-    - name: create example.org domain
-      redhat.satellite.domain:
-        name: example.org
+    - name: Create Sample Organization
+      redhat.satellite.organization:
+        name: Test Organization
         state: present
         server_url: https://satellite.lab.example.com
         username: admin
