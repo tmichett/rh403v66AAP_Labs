@@ -32,8 +32,7 @@
 
     - name: Upload Manifest
       redhat.satellite.subscription_manifest:
-        name: "{{ item }}"
-        organizations: "{{ org_name }}"
+        organization: "{{ org_name }}"
         state: present
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
