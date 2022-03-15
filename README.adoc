@@ -1,0 +1,27 @@
+
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:pygments-style: tango
+:source-highlighter: pygments
+:imagesdir: images/
+
+
+= RH403 Custom Labs and Course Additions
+
+This repository contains the contents for the RH403v6.6 course with AAP content for managing Satellite as well as other components such as Hammer, OpenSCAP, and SCAP Workbench. The structure is as follows ...
+
+* *Ansible* - Contains Ansible resources, playbooks, and starter templates for labs.
+
+* *Files* - Contains RPMs and Ansible collections to be installed to complete labs.
+
+* *Grading* - Contains grading script fixes.
+
+* *Hammer* - Contains Hammer resources and files for labs.

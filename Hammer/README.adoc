@@ -1,62 +1,19 @@
-= skeleton
 
-Skeleton repository for template student guide and instructor guide
-AsciiDoc files.
+ifndef::env-github[:icons: font]
+ifdef::env-github[]
+:status:
+:outfilesuffix: .adoc
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+:pygments-style: tango
+:source-highlighter: pygments
+:imagesdir: images/
 
-[IMPORTANT]
-====
-The skeleton repository is read-only for most team members.  If you want to
-make changes raise an issue in GitHub.
-====
 
-== Branches
-Commits to `master` branch are expected to build and may be immediately deployed to
-ROLE stage without further notice.
+= Hammer Resources
 
-Commits to `release/*` branches are expected to be final releases being sent to
-production and may be immediately deployed to ROLE production and rendered as final
-PDFs without further notice.  These branches are protected and will require approved
-pull requests in order to be updated.
-
-[cols="2*", options="header"]
-|===
-|branch
-|purpose
-
-|`devel`
-|Current development
-
-|`master`
-|Latest release of skeleton. Immediately deploys to rol-stage.
-|===
-
-== Repository Structure
-[cols="2*", options="header"]
-|===
-|file or directory
-|purpose
-
-|BUILD.adoc
-|AsciiDoc file providing information about the build process
-
-|README.adoc
-|This file
-
-|classroom/
-|Directory containing classroom setup materials specific to this course
-
-|guides/
-|Directory containing template course materials
-
-|slides/
-|Course slide presentations
-|===
-
-[NOTE]
-====
-This document has been written using http://asciidoctor.org[AsciiDoc] markup.
-A quick reference sheet is available at http://asciidoctor.org/docs/asciidoc-syntax-quick-reference/
-
-GitHub will automatically render AsciiDoc files that end in `.adoc`, `.asciidoc`, or `.asc`.  For more
-information, see https://github.com/github/markup.
-====
+This directory contains several files, demos, and sample commands that can be used to interact with Satellite using the Hammer CLI.
