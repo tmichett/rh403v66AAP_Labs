@@ -44,3 +44,4 @@
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
         manifest_path: "/tmp/manifest_finance.zip"
+        repository_url: http://content.example.com/rhs6.6/x86_64/cdn
