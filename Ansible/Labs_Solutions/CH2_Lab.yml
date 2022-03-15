@@ -24,3 +24,17 @@
         validate_certs: "{{ cert_validate }}"
         all_repositories: yes
       loop: "{{ sat_repos }}"
+
+    - name: Create Sync Plan
+      redhat.satellite.sync_plan:
+        name: Sync Plan for Red Hat Products
+        organization: "{{ org_name }}"
+        state: enabled
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        sync_date: "2022-03-15 18:00:00 UTC"
+        interval: daily
+        products:
+          - 'Red Hat Enterprise Linux Server'
