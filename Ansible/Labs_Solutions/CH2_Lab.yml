@@ -43,7 +43,7 @@
 
 
     - name: Create Build Lifecycle Environment
-      redhat.satellite.sync_plan:
+      redhat.satellite.lifecycle_environment:
         name: Build
         label: Build
         prior: library
@@ -55,7 +55,7 @@
         validate_certs: "{{ cert_validate }}"
 
     - name: Create Test Lifecycle Environment
-      redhat.satellite.sync_plan:
+      redhat.satellite.lifecycle_environment:
         name: Test
         label: Test
         prior: Build
@@ -67,7 +67,7 @@
         validate_certs: "{{ cert_validate }}"
 
     - name: Create Deploy Lifecycle Environment
-      redhat.satellite.sync_plan:
+      redhat.satellite.lifecycle_environment:
         name: Deploy
         label: Deploy
         prior: Test
