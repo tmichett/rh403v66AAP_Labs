@@ -30,6 +30,11 @@
         validate_certs: "{{ cert_validate }}"
       loop: "{{ org_locations }}"
 
+    - name: Download Manifest from Classroom
+      get_url:
+        url: http://materials/manifest_finance.zip
+        dest: "/tmp/manifest_finance.zip"
+
     - name: Upload Manifest
       redhat.satellite.subscription_manifest:
         organization: "{{ org_name }}"
@@ -38,4 +43,4 @@
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
-        manifest_path: "http://materials/manifest_finance.zip"
+        manifest_path: "/tmp/manifest_finance.zip"
