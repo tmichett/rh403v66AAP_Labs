@@ -15,10 +15,11 @@
   tasks:
     - name: Enable Repositories
       redhat.satellite.repository_set:
-        name: "{{ sat_repos }}"
+        name: "{{ item }}"
         organization: "{{ org_name }}"
         state: enabled
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
+      loop: "{{ sat_repos }}"
