@@ -8,8 +8,8 @@
       - San Francisco
       - Tokyo
     sat_repos:
-      - Red Hat Enterprise Linux 8.1 for x86_64 - AppStream (RPMs)
-      - Red Hat Enterprise Linux 8.1 for x86_64 - BaseOS (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
       - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
 
   tasks:
