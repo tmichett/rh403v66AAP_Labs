@@ -46,7 +46,7 @@
       redhat.satellite.lifecycle_environment:
         name: Build
         label: Build
-        prior: library
+        prior: Library
         organization: "{{ org_name }}"
         state: present
         server_url: "{{ sat_url }}"
