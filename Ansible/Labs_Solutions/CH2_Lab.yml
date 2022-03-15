@@ -22,4 +22,5 @@
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
+        all_repositories: yes
       loop: "{{ sat_repos }}"
