@@ -16,6 +16,7 @@
     - name: Enable Repositories
       redhat.satellite.repository_set:
         name: "{{ sat_repos }}"
+        organization: "{{ org_name }}"
         state: enabled
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
