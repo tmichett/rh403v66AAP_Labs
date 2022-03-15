@@ -1,5 +1,5 @@
 ---
-url: https://satellite.lab.example.com
-un: admin
-pw: redhat
-validate: no
+sat_url: https://satellite.lab.example.com
+sat_un: admin
+sat_pw: redhat
+cert_validate: no
