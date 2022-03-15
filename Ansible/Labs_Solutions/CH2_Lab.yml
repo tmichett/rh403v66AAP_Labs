@@ -77,3 +77,15 @@
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
+
+    - name: Create the Base Content View
+      redhat.satellite.content_view:
+        name: Base
+        organization: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        repositories:
+          - name: Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
