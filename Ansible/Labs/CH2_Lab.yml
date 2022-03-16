@@ -1,0 +1,56 @@
+---
+- name: Complete Chapter 1 Lab
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Finance
+    sat_repos:
+      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+
+  tasks:
+### Complete the task using the repos above in sat_repos    
+    - name: Enable Repositories
+
+
+### Need to finish for Sync Dates/Times/Intervals
+    - name: Create Sync Plan
+      redhat.satellite.sync_plan:
+        name: Sync Plan for Red Hat Products
+        organization: "{{ org_name }}"
+        enabled: true
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        products:
+          - 'Red Hat Enterprise Linux for x86_64'
+
+
+### Complete the task
+    - name: Create Build Lifecycle Environment
+
+### Complete the task
+    - name: Create Test Lifecycle Environment
+
+### Complete the task
+    - name: Create Deploy Lifecycle Environment
+
+
+    - name: Create the Base Content View
+      redhat.satellite.content_view:
+        name: Base
+        organization: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        repositories:
+          - name: Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8.1
+            product: Red Hat Enterprise Linux for x86_64
+
+### Complete the task
+    - name: Publish the Base Content View - Not Idempotent

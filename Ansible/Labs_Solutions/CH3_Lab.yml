@@ -1,19 +1,37 @@
-- hosts: localhost
-  vars_files:
-    - sat_vars.yml
+---
+- name: Complete Chapter 3 Lab
+  hosts: localhost
+  vars_files: sat_vars.yml
   vars:
-    activation_key: OperationsServers
+    org_name: Finance
+    sat_repos:
+      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+    activation_key: FinanceKey
     lifecycle_env: Library
     content_view: Default Organization View
     subscriptions:
       - name: "Red Hat Enterprise Linux Server, Standard (Physical or Virtual Nodes)"
-    organization: Operations
+      - name: "Red Hat Satellite Infrastructure Subscription"
+    organization: "{{ org_name }}"
     repositories:
       - satellite-tools-6.6-for-rhel-8-x86_64-rpms
       - rhel-8-for-x86_64-baseos-rpms
       - rhel-8-for-x86_64-appstream-rpms
 
   tasks:
+    - name: Create the Finance Host Collection
+      redhat.satellite.host_collection:
+        name: Finance
+        description: Finance Servers
+        organization: "{{ org_name }}"
+        state: enabled
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+
     - name: Create the {{ activation_key }} Activation Key
       redhat.satellite.activation_key:
         name: "{{ activation_key }}"
@@ -26,6 +44,9 @@
         username: "{{ un }}"
         password: "{{ pw }}"
         validate_certs: "{{ validate }}"
+        unlimited_hosts: yes
+        host_collections: Finance
+        release_version: 8.1
         content_overrides:
         - label: "{{ item }}"
           override: enabled
