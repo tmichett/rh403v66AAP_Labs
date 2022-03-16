@@ -23,10 +23,10 @@
   tasks:
     - name: Create the Finance Host Collection
       redhat.satellite.host_collection:
-        name: Finance
+        name: FinanceServers
         description: Finance Servers
         organization: "{{ org_name }}"
-        state: enabled
+        state: present
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
@@ -40,10 +40,10 @@
         subscriptions: "{{ subscriptions }}"
         organization: "{{ organization }}"
         state: present
-        server_url: "{{ url }}"
-        username: "{{ un }}"
-        password: "{{ pw }}"
-        validate_certs: "{{ validate }}"
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
         unlimited_hosts: yes
         host_collections: Finance
         release_version: 8.1
