@@ -45,7 +45,7 @@
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
         unlimited_hosts: yes
-        host_collections: Finance
+        host_collections: FinanceServers
         release_version: 8.1
         content_overrides:
         - label: "{{ item }}"
