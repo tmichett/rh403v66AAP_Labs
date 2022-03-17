@@ -1,0 +1,65 @@
+---
+- name: Complete Chapter 3 Lab - Setup Activation Key
+  hosts: localhost
+  vars_files: sat_vars.yml
+  ### Update Missing variables
+  vars:
+    org_name:
+    sat_repos:
+      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+    activation_key:
+    lifecycle_env:
+    content_view:
+    subscriptions:
+      - name: "Red Hat Enterprise Linux Server, Standard (Physical or Virtual Nodes)"
+      - name: "Red Hat Satellite Infrastructure Subscription"
+    organization: "{{ org_name }}"
+    repositories:
+      - satellite-tools-6.6-for-rhel-8-x86_64-rpms
+      - rhel-8-for-x86_64-baseos-rpms
+      - rhel-8-for-x86_64-appstream-rpms
+
+  tasks:
+
+### Complete the task
+    - name: Create the Finance Host Collection
+      redhat.satellite.host_collection:
+
+### Complete the task
+    - name: Create the {{ activation_key }} Activation Key
+      redhat.satellite.activation_key:
+
+
+
+- name: Complete Chapter 3 Lab -  Register Host ServerB To Satellite
+  hosts: serverb.lab.example.com
+  vars_files:
+    - sat_vars.yml
+  vars:
+    activation_key: FinanceKey
+    org_name: Finance
+
+
+  tasks:
+
+    - name: Unregister Server
+      redhat_subscription:
+        state: absent
+
+    - name: Prepare System for Satellite Registration - Get Cert
+      get_url:
+        url: "{{ sat_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        dest: /tmp/katello-latest.rpm
+        validate_certs: no
+
+    - name: Install Katello rpm
+      yum:
+        name: /tmp/katello-latest.rpm
+        state: latest
+        disable_gpg_check: yes
+
+### Complete the task
+    - name: Register with Activation key
+      redhat_subscription:
