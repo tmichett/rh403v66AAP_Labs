@@ -1,0 +1,16 @@
+---
+- name: Update server
+  yum: name='*' state=latest
+  when: update_server
+
+- name: Install basic packages
+  yum: name=chrony state=present
+
+- name: Start chrony service
+  service: name=chronyd state=started
+
+- name: Install capsule
+  yum: name=satellite-capsule state=present
+
+- name: Run satellite-installer command
+  command: /bin/bash "/certs/{{ inventory_hostname }}-script.sh"

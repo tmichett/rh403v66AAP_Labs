@@ -1,0 +1,51 @@
+
+
+### Set Remote Execution to Connect by IP Address
+hammer settings set --name remote_execution_connect_by_ip --value yes
+
+### Create Operations Activation Key
+hammer activation-key create --name OperationsServers --organization Operations
+
+### Add Subscriptions to Activation Key
+hammer --csv --no-headers subscription list --organization Operations  | cut -d, -f1 | xargs -n 1 hammer activation-key add-subscription --name OperationsServers --organization Operations --subscription-id
+
+### Enable Satellite 6 Tools on Activation Key
+hammer --csv activation-key product-content --name OperationsServers --organization Operations | awk -F, "/satellite-tools.*rhel-8/ {print \$3}" | xargs hammer activation-key content-override --name OperationsServers --organization Operations --value 1  --content-label
+
+### Set Content View, Environment, and Release on Activation Key
+hammer activation-key update --name OperationsServers --content-view "Default Organization View" --lifecycle-environment Library --unlimited-hosts --organization Operations --release-version 8.1
+
+
+### Configure Operations Host Group
+hammer hostgroup create --organization Operations --location Boston --subnet "Boston Data Center" --domain "boston.lab.example.com" --content-source "satellite.lab.example.com" --operatingsystem "RedHat 8.1" --pxe-loader "PXELinux BIOS" --partition-table "Kickstart default" --name "Operations Host Group" --lifecycle-environment Library --content-view "Default Organization View" --ansible-roles motd --architecture x86_64
+
+### Set Activation Key on Operations Host Group
+hammer hostgroup set-parameter --name kt_activation_keys --value "OperationsServers" --hostgroup "Operations Host Group"
+
+
+### Configure Operations Virtual Host Group
+hammer hostgroup create --organization Operations --location Boston --subnet "Boston Data Center" --domain "boston.lab.example.com" --content-source "satellite.lab.example.com" --operatingsystem "RedHat 8.1" --pxe-loader "PXELinux BIOS" --partition-table "Kickstart default" --name "Operations Virtual Host Group" --lifecycle-environment Library --content-view "Default Organization View" --ansible-roles motd --architecture x86_64 --compute-resource "RHV Production Datacenter"
+
+### Set Activation Key on Operations Host Group
+hammer hostgroup set-parameter --name kt_activation_keys --value "OperationsServers" --hostgroup "Operations Virtual Host Group"
+
+### Configure Kickstart Channels - RHEL8 Appstream
+hammer repository-set enable --name 'Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)' --releasever 8.1 --product 'Red Hat Enterprise Linux for x86_64' --organization Operations
+
+### Configure Kickstart Channels - RHEL8 BaseOS
+hammer repository-set enable --name 'Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)' --releasever 8.1 --product 'Red Hat Enterprise Linux for x86_64' --organization Operations
+
+### Synchronize Kickstart Channels - RHEL8 BaseOS
+hammer repository synchronize --name "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.1" --organization Operations --product 'Red Hat Enterprise Linux for x86_64' --async
+
+### Synchronize Kickstart Channels - RHEL8 BasoOS
+hammer repository synchronize --name "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.1" --organization Operations --product 'Red Hat Enterprise Linux for x86_64' --async
+
+### Configure Network Resources
+satellite-installer --foreman-proxy-dns true --foreman-proxy-dns-interface eth0 --foreman-proxy-dns-forwarders 172.25.250.254 --foreman-proxy-dns-zone boston.lab.example.com --foreman-proxy-dns-reverse 250.25.172.in-addr.arpa --foreman-proxy-dhcp true --foreman-proxy-dhcp-interface eth0 --foreman-proxy-dhcp-range "172.25.250.50 172.25.250.100" --foreman-proxy-dhcp-nameservers 172.25.250.15 --foreman-proxy-dhcp-gateway 172.25.250.254 --foreman-proxy-tftp true
+
+### Configure Boston Domain
+hammer domain create --name boston.lab.example.com  --dns satellite.lab.example.com --locations "Boston","Default Location" --organization "Operations"
+
+### Configure Boston Subnet
+hammer subnet create --name "Boston Data Center" --locations "Boston","Default Location" --organizations "Operations" --domains boston.lab.example.com --network 172.25.250.0 --mask 255.255.255.0 --dns-primary 172.25.250.15 --from 172.25.250.50 --to 172.25.250.100 --dns satellite.lab.example.com --dhcp satellite.lab.example.com --tftp satellite.lab.example.com --boot-mode DHCP --ipam DHCP --httpboot-id 1 --template-id 1 --discovery-id 1

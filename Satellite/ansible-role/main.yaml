@@ -1,0 +1,7 @@
+- name: New /etc/motd file
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    mode: 644
+    owner: root
+    group: root

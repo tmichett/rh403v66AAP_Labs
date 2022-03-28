@@ -1,0 +1,12 @@
+---
+- hosts: capsules
+  vars_files:
+  - vars.yml
+  vars:
+    capsule_install: false
+    capsule_upgrade: true
+    z_stream_update: true
+  remote_user: root
+  roles:
+  - capsule_upgrade
+  - capsule_check

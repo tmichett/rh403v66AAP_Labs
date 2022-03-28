@@ -1,0 +1,12 @@
+---
+capsule_version: 6.6
+
+# Applicable only for Capsule install
+satellite_org_label: Operations
+satellite_activation_key: Capsule_Key
+satellite_location: Default Location
+skip_katello_agent: false
+update_server: false
+capsule_cname: none
+force_bootstrap_registration: false
+enable_tools_repo: true
