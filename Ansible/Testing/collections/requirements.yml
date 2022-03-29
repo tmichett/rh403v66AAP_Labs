@@ -1,5 +1,6 @@
 ---
 collections:
-  # Install a collection from a File
-  - name: redhat.satellite
-    source: file:///tmp/redhat-satellite-3.1.0.tar.gz
+  # Install a collection from a File - https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#installing-a-collection-from-source-files
+  #  - name: redhat.satellite
+  - name: "/tmp/redhat-satellite-3.1.0.tar.gz"
+    type: file
