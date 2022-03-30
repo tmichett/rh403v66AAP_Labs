@@ -4,7 +4,7 @@
   vars_files: sat_vars.yml
   tasks:
     - name: Create Sample Organization
-      redhat.satellite.organization: <1>
+      redhat.satellite.organization:
         name: Test Organization
         state: present
         server_url: "{{ sat_url }}"
