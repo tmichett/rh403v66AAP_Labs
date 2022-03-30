@@ -1,0 +1,13 @@
+---
+- name: Test Satellite
+  hosts: localhost
+  vars_files: sat_vars.yml
+  tasks:
+    - name: Create Sample Organization
+      redhat.satellite.organization: <1>
+        name: Test Organization
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
