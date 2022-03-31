@@ -1,5 +1,5 @@
 ---
-- name: Complete Chapter 1 Lab
+- name: Complete Chapter 2 Lab
   hosts: localhost
   vars_files: sat_vars.yml
   vars:
@@ -10,7 +10,7 @@
       - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
 
   tasks:
-### Complete the task using the repos above in sat_repos    
+### Complete the task using the repos above in sat_repos
     - name: Enable Repositories
 
 

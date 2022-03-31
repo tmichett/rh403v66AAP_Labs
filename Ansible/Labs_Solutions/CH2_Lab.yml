@@ -1,5 +1,5 @@
 ---
-- name: Complete Chapter 1 Lab
+- name: Complete Chapter 2 Lab
   hosts: localhost
   vars_files: sat_vars.yml
   vars:
