@@ -61,7 +61,6 @@
     activation_key: OSCAPKey
     org_name: Finance
 
-
   tasks:
 
     - name: Unregister Server
@@ -93,5 +92,17 @@
           - katello-host-tools
           - katello-host-tools-tracer
           - katello-agent
+        state: latest
+        disable_gpg_check: yes
+
+
+- name: Prepare Workstation for SCAP
+  hosts: workstation.lab.example.com
+
+  tasks:
+    - name: Install Satellite Control Tools RPMs
+      yum:
+        name:
+          - scap-workbench
         state: latest
         disable_gpg_check: yes
