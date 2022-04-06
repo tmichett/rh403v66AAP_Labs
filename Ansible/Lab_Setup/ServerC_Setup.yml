@@ -100,7 +100,7 @@
   hosts: workstation.lab.example.com
 
   tasks:
-    - name: Install Satellite Control Tools RPMs
+    - name: Install SCAP Workbench
       yum:
         name:
           - scap-workbench
