@@ -13,12 +13,6 @@ endif::[]
 :imagesdir: images/
 
 
-= Using Ansible to Manage Satellite
+= OpenSCAP Playbooks
 
-The directory here is broken down into examples as well as resources for completing the course labs. The directory structure is as follows.
-
-* *Colelctions* - Contains Ansible collections in expanded form.
-* *Labs* - Contains Ansible playbook snippets to be used to complete end of chapter labs.
-* *Labs_Solutions* - Contains *_Completed_* Ansible playbook for end of chapter labs.
-
-The base directory contains examples that will be used as part of the demonstrations and exercises.
+Location to store OSCAP Remediation playbooks and configuration files.
