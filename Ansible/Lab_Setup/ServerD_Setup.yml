@@ -161,7 +161,7 @@
     lifecycle_env: Library
     Puppet_env: SCAPPuppet
     content_view: Default Organization View
-
+    organization: "{{ org_name }}"
 
   tasks:
 
