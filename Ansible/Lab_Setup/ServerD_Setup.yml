@@ -52,6 +52,12 @@
           override: enabled
       loop: "{{ repositories }}"
 
+    - name: Modify {{ activation_key }} Activation Key
+      redhat.satellite.activation_key:
+        name: "{{ activation_key }}"
+        content_overrides:
+          label: satellite-tools-6.6-for-rhel-8-x86_64-rpms
+
     - name: "Create a SCAPTest Hostgroup"
       redhat.satellite.hostgroup:
         name: "SCAPTest"
