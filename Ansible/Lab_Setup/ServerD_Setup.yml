@@ -66,6 +66,21 @@
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
 
+    - name: Create the SCAPPuppet Environment
+      redhat.satellite.hostgroup:
+        name: "{{ Puppet_env }}"
+        organization: "{{ organization }}"
+        locations:
+          - Boston
+          - Default Location
+          - Tokyo
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        state: present
+
+
     - name: Create a SCAPTest Hostgroup
       redhat.satellite.hostgroup:
         name: "SCAPTest"
