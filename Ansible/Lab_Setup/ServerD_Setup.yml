@@ -10,6 +10,7 @@
       - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
     activation_key: OSCAPKey
     lifecycle_env: Library
+    Puppet_env: SCAPPuppet
     content_view: Default Organization View
     subscriptions:
       - name: "Red Hat Enterprise Linux Server, Standard (Physical or Virtual Nodes)"
@@ -72,6 +73,7 @@
         organization: "{{ organization }}"
         lifecycle_environment: "{{ lifecycle_env }}"
         content_view: "{{ content_view }}"
+        environment: "{{ Puppet_env }}"
         puppet_proxy: satellite.lab.example.com
         puppet_ca_proxy: satellite.lab.example.com
         openscap_proxy: satellite.lab.example.com
