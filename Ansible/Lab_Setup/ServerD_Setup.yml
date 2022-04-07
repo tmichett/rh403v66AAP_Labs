@@ -70,6 +70,10 @@
         name: "SCAPTest"
         content_source: satellite.lab.example.com
         organization: "{{ organization }}"
+        environment: Library
+        puppet_proxy: satellite.lab.example.com
+        puppet_ca_proxy: satellite.lab.example.com
+        openscap_proxy: satellite.lab.example.com
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
