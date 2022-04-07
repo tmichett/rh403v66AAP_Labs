@@ -1,0 +1,96 @@
+---
+- name: Prepare OSCAP Labs for Chapter 3
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Finance
+    sat_repos:
+      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+    activation_key: OSCAPKey
+    lifecycle_env: Library
+    content_view: Default Organization View
+    subscriptions:
+      - name: "Red Hat Enterprise Linux Server, Standard (Physical or Virtual Nodes)"
+      - name: "Red Hat Satellite Infrastructure Subscription"
+    organization: "{{ org_name }}"
+    repositories:
+      - satellite-tools-6.6-for-rhel-8-x86_64-rpms
+      - rhel-8-for-x86_64-baseos-rpms
+      - rhel-8-for-x86_64-appstream-rpms
+
+  tasks:
+    - name: Create the Finance Host Collection
+      redhat.satellite.host_collection:
+        name: FinanceServers
+        description: Finance Servers
+        organization: "{{ org_name }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+
+    - name: Create the {{ activation_key }} Activation Key
+      redhat.satellite.activation_key:
+        name: "{{ activation_key }}"
+        lifecycle_environment: "{{ lifecycle_env }}"
+        content_view: "{{ content_view }}"
+        subscriptions: "{{ subscriptions }}"
+        organization: "{{ organization }}"
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        unlimited_hosts: yes
+        host_collections: FinanceServers
+        release_version: 8.1
+        content_overrides:
+        - label: "{{ item }}"
+          override: enabled
+      loop: "{{ repositories }}"
+
+
+- name: Register Host ServerD To Satellite
+  hosts: serverd.lab.example.com
+  vars_files:
+    - sat_vars.yml
+  vars:
+    activation_key: OSCAPKey
+    org_name: Finance
+
+  tasks:
+
+    - name: Unregister Server
+      redhat_subscription:
+        state: absent
+
+    - name: Prepare System for Satellite Registration - Get Cert
+      get_url:
+        url: "{{ sat_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        dest: /tmp/katello-latest.rpm
+        validate_certs: no
+
+    - name: Install Katello rpm
+      yum:
+        name: /tmp/katello-latest.rpm
+        state: latest
+        disable_gpg_check: yes
+
+    - name: Register with Activation key
+      redhat_subscription:
+        state: present
+        activationkey: "{{ activation_key }}"
+        org_id: "{{ org_name }}"
+      when: activation_key is defined
+
+    - name: Install Satellite Control Tools RPMs
+      yum:
+        name:
+          - katello-host-tools
+          - katello-host-tools-tracer
+          - katello-agent
+        state: latest
+        disable_gpg_check: yes
