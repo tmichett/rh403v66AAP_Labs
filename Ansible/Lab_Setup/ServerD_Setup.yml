@@ -67,7 +67,7 @@
         validate_certs: "{{ cert_validate }}"
 
     - name: Create the SCAPPuppet Environment
-      redhat.puppet_environment:
+      redhat.satellite.puppet_environment:
         name: "{{ Puppet_env }}"
         organization: "{{ organization }}"
         locations:
