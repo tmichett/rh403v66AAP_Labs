@@ -77,6 +77,11 @@
         puppet_proxy: satellite.lab.example.com
         puppet_ca_proxy: satellite.lab.example.com
         openscap_proxy: satellite.lab.example.com
+        locations:
+          - Boston
+          - Default Location
+          - Tokyo
+        activation_keys: "{{ activation_key }}"
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
