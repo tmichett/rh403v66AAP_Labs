@@ -69,7 +69,7 @@
     - name: Create the SCAPPuppet Environment
       redhat.satellite.puppet_environment:
         name: "{{ Puppet_env }}"
-        organization: "{{ organization }}"
+        organizations: "{{ organization }}"
         locations:
           - Boston
           - Default Location
