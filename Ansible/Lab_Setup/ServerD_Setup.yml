@@ -56,14 +56,15 @@
       redhat.satellite.activation_key:
         name: "{{ activation_key }}"
         content_overrides:
-          label: satellite-tools-6.6-for-rhel-8-x86_64-rpms
+          - label: satellite-tools-6.6-for-rhel-8-x86_64-rpms
+            override: enabled
         organization: "{{ organization }}"
         state: present
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
-        
+
     - name: "Create a SCAPTest Hostgroup"
       redhat.satellite.hostgroup:
         name: "SCAPTest"
