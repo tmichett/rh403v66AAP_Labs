@@ -39,7 +39,6 @@
 
     - name: Sync Repositories
       redhat.satellite.repository_sync:
-        name: Syncing Red Hat Products
         organization: "{{ org_name }}"
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
