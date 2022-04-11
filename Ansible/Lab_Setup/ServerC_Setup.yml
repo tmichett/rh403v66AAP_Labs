@@ -118,3 +118,6 @@
           - scap-workbench
         state: latest
         disable_gpg_check: yes
+
+    - name: Import Workstation playbook for updates
+      import_playbook: Workstation_Update.yml
