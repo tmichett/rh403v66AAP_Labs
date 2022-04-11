@@ -44,8 +44,7 @@
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
-        product:
-          - 'Red Hat Enterprise Linux for x86_64'
+        product: Red Hat Enterprise Linux for x86_64
 
 
     - name: Create Build Lifecycle Environment
