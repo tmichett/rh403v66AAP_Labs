@@ -44,6 +44,6 @@
     - name: Update SCAP Workbench
       yum:
         name:
-          - scap-workbench
+          - openscap*
         state: latest
         disable_gpg_check: yes
