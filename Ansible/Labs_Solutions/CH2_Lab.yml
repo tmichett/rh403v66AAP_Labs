@@ -37,6 +37,18 @@
         products:
           - 'Red Hat Enterprise Linux for x86_64'
 
+    - name: Sync Repositories
+      redhat.satellite.repository_sync:
+        name: Syncing Red Hat Products
+        organization: "{{ org_name }}"
+        enabled: true
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        products:
+          - 'Red Hat Enterprise Linux for x86_64'
 
 
     - name: Create Build Lifecycle Environment
