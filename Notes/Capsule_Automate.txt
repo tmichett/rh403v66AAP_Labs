@@ -1,0 +1,9 @@
+On Workstation - to Install and Configure capsule
+
+lab capsule-install start (Takes about 30 minutes)
+
+wget http://materials.example.com/capsule-install.sh
+
+chmod +x capsule-install.sh
+
+./capsule-install.sh  (Takes about 30 minutes)
