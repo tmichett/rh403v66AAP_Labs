@@ -1,0 +1,47 @@
+---
+- name: Register Host Workstation To Satellite
+  hosts: workstation.lab.example.com
+  vars:
+    activation_key: OSCAPKey
+    org_name: Finance
+
+  tasks:
+
+    - name: Unregister Server
+      redhat_subscription:
+        state: absent
+
+    - name: Prepare System for Satellite Registration - Get Cert
+      get_url:
+        url: "{{ sat_url }}/pub/katello-ca-consumer-latest.noarch.rpm"
+        dest: /tmp/katello-latest.rpm
+        validate_certs: no
+
+    - name: Install Katello rpm
+      yum:
+        name: /tmp/katello-latest.rpm
+        state: latest
+        disable_gpg_check: yes
+
+    - name: Register with Activation key
+      redhat_subscription:
+        state: present
+        activationkey: "{{ activation_key }}"
+        org_id: "{{ org_name }}"
+      when: activation_key is defined
+
+    - name: Install Satellite Control Tools RPMs
+      yum:
+        name:
+          - katello-host-tools
+          - katello-host-tools-tracer
+          - katello-agent
+        state: latest
+        disable_gpg_check: yes
+
+    - name: Update SCAP Workbench
+      yum:
+        name:
+          - scap-workbench
+        state: latest
+        disable_gpg_check: yes
