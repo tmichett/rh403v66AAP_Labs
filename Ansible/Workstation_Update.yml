@@ -1,6 +1,8 @@
 ---
 - name: Register Host Workstation To Satellite
   hosts: workstation.lab.example.com
+  vars_files:
+    - sat_vars.yml
   vars:
     activation_key: OSCAPKey
     org_name: Finance
