@@ -1,0 +1,42 @@
+= Links and References
+
+
+== SCAP and Security
+
+* *SECURITY COMPLIANCE WITH ANSIBLE AND OPENSCAP - PART 1*: https://www.virtualnebula.com/blog/2021/11/12/security-compliance-with-ansible-and-openscap
+
+* *SECURITY COMPLIANCE WITH ANSIBLE AND OPENSCAP - PART 2*: https://www.virtualnebula.com/blog/2021/11/12/security-compliance-with-ansible-and-openscap-part-2
+
+* *Red Hat Security Labs*: https://github.com/RedHatDemos/SecurityDemos
+
+* *Contributing to SSG*: https://github.com/ComplianceAsCode/content/wiki/Contributing
+
+
+== Ansible and Ansible Automation
+
+* *Ansible Automation Workshop*: http://redhatgov.io/workshops/ansible_automation/
+
+* *Automating host configuration with Red Hat Satellite and RHEL System Roles*: https://www.redhat.com/en/blog/automating-host-configuration-red-hat-satellite-and-rhel-system-roles
+
+* *A production guide to automating and managing SSH server configuration with RHEL system roles*: https://www.redhat.com/en/blog/production-guide-automating-and-managing-ssh-server-configuration-rhel-system-roles
+
+* *Introduction to RHEL System Roles*: https://www.redhat.com/en/blog/introduction-rhel-system-roles
+
+* *Automate RHEL web console deployments with the Cockpit and certificate RHEL System Roles*: https://www.redhat.com/en/blog/automate-rhel-web-console-deployments-cockpit-and-certificate-rhel-system-roles
+
+* *Automate performance metrics collection and visualization with RHEL System Roles*: https://www.redhat.com/en/blog/automate-performance-metrics-collection-and-visualization-rhel-system-roles
+
+
+== Red Hat Satellite
+
+* *Deploying OpenSCAP on Satellite using Ansible*: https://www.redhat.com/en/blog/deploying-openscap-satellite-using-ansible
+
+* *Satellite Host Configuration with RHEL System Roles Powered by Ansible*: https://www.redhat.com/en/blog/satellite-host-configuration-rhel-system-roles-powered-ansible
+
+== Red Hat Labs and Other Resources
+
+* *Red Hat Enterprise Linux Skills Workshops*: https://lab.redhat.com/
+
+* *Red Hat Developer Network*: https://developers.redhat.com/
+
+* *Red Hat Customer Portal Labs*: https://access.redhat.com/labs/
