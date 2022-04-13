@@ -1,4 +1,4 @@
-On Workstation - to Install and Configure capsule
+On Workstation - to Install and Configure capsule (Eliminates Need for Capsule Lab)
 
 lab capsule-install start (Takes about 30 minutes)
 
