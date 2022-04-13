@@ -26,6 +26,7 @@
 
 * *Automate performance metrics collection and visualization with RHEL System Roles*: https://www.redhat.com/en/blog/automate-performance-metrics-collection-and-visualization-rhel-system-roles
 
+* *Ansible + OpenSCAP For Compliance Automation*: https://medium.com/@jackprice/ansible-openscap-for-compliance-automation-14200fe70663
 
 == Red Hat Satellite
 
