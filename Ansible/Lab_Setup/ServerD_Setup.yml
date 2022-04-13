@@ -83,7 +83,7 @@
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
         state: present
-        
+
 - name: Register Host ServerD To Satellite
   hosts: serverd.lab.example.com
   vars_files:
@@ -143,7 +143,7 @@
 
   tasks:
 
-    - name: Modify ServerD Host Group and Puppet Information
+    - name: Modify ServerD Host Group Information
       redhat.satellite.host:
         name: serverd.lab.example.com
         hostgroup: "SCAPTest"
