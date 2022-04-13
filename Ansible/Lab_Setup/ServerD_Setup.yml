@@ -65,6 +65,25 @@
         password: "{{ sat_pw }}"
         validate_certs: "{{ cert_validate }}"
 
+    - name: Create a SCAPTest Hostgroup
+      redhat.satellite.hostgroup:
+        name: "SCAPTest"
+        content_source: satellite.lab.example.com
+        organization: "{{ organization }}"
+        lifecycle_environment: "{{ lifecycle_env }}"
+        content_view: "{{ content_view }}"
+        openscap_proxy: satellite.lab.example.com
+        locations:
+          - Boston
+          - Default Location
+          - Tokyo
+        activation_keys: "{{ activation_key }}"
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        state: present
+        
 - name: Register Host ServerD To Satellite
   hosts: serverd.lab.example.com
   vars_files:
@@ -106,3 +125,35 @@
           - katello-agent
         state: latest
         disable_gpg_check: yes
+
+- name: Prepare HostD For Host Group
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Finance
+    sat_repos:
+      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+    activation_key: OSCAPKey
+    lifecycle_env: Library
+    Puppet_env: SCAPPuppet
+    content_view: Default Organization View
+    organization: "{{ org_name }}"
+
+  tasks:
+
+    - name: Modify ServerD Host Group and Puppet Information
+      redhat.satellite.host:
+        name: serverd.lab.example.com
+        hostgroup: "SCAPTest"
+        content_source: satellite.lab.example.com
+        organization: "{{ organization }}"
+        lifecycle_environment: "{{ lifecycle_env }}"
+        content_view: "{{ content_view }}"
+        openscap_proxy: satellite.lab.example.com
+        state: present
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
