@@ -1,0 +1,34 @@
+= DEMOS
+
+In order for the system to work properly, a newer version of Ansible must be installed. Additionally, some of the labs and GEs must be completed to have all components in place. The instructions here get the system ready for an instructor so that DEMOs can be provided without going through all the labs and guided exercises.
+
+== Demo Prep
+
+Switch to the Github directory and *Demo_Prep* directory for Ansible.
+
+.Navigating to Correct Directory
+[source,bash]
+----
+[student@workstation ~]$ cd /home/student/Github/rh403v66AAP_Labs/Ansible/Demo_Prep
+----
+
+
+.Setting up Ansible and Copying Modules
+[source,bash]
+----
+[student@workstation Demo_Prep]$ ansible-playbook SystemSetup.yml -K --become
+----
+
+== Satellite Prep
+
+.Setting Up Operations Organization - Installing Collections
+[source,bash]
+----
+[student@workstation Demo_Prep]$ ansible-galaxy collection install -r collections/requirements.yml -p collections/
+----
+
+.Running the Playbook
+[source,bash]
+----
+[student@workstation Demo_Prep]$ ansible-playbook CH1_ORG_GE.yml
+----
