@@ -46,5 +46,6 @@
         name:
           - openscap*
           - scap-workbench
+          - scap-security*
         state: latest
         disable_gpg_check: yes
