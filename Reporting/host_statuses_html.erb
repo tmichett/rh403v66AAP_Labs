@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Host Statuses</title>
+   <style>
+       th {
+           background-color: black;
+           color: white;
+       }
+       td.green {
+           background-color:#92d400;
+           color:black;
+       }
+       td.yellow {
+           background-color:#f0ab00;
+           color:black;
+       }
+       td.red {
+           background-color:#CC0000;
+           color:black;
+       }
+       table,th,td {
+               border-collapse:collapse;
+               border: 1px solid black;
+       }
+   </style>
+</head>
+<body>
+<table>
+<tr>
+       <th> Hostname </th>
+       <th> Status </th>
+<% load_hosts(search: input('hosts'), includes: :host_statuses).each_record do |host| -%>
+   <% all_host_statuses_hash(host).each do |key, value|  -%>
+       <th> <%= key %> </th>
+   <% end -%>
+   <% break -%>
+<% end -%>
+</tr>
+
+<%- load_hosts(search: input('hosts'), includes: :host_statuses).each_record do |host| -%>
+   <tr>
+   <td> <%= host.name   %> </td>
+   <% if host.global_status == 0 -%>
+       <td class="green"> OK </td>
+   <% elsif host.global_status == 1 -%>
+       <td class="yellow"> Warning </td>
+   <% else -%>
+       <td class="red"> Error (<%= host.global_status %>) </td>
+   <% end -%>
+
+   <% all_host_statuses_hash(host).each do |key, value|  -%>
+       <% if value == 0 -%>
+           <td class="green"> OK </td>
+       <% elsif value == 1  -%>
+           <td class="yellow"> Warning </td>
+       <% else -%>
+           <td class="red"> Error (<%= value %>) </td>
+       <% end -%>
+   <% end -%>
+   </tr>
+<% end -%>
+
+</table>
+</body>
+</html>
