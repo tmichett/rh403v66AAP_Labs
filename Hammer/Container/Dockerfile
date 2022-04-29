@@ -19,6 +19,4 @@ COPY foreman.yml /root/.hammer/cli.modules.d/foreman.yml
 USER root
 WORKDIR /root
 
-RUN hammer --fetch-ca-cert https://satellite.lab.example.com/ \
-   && install /root/.hammer/certs/sallite.lab.example.com_443.pem /etc/pki/ca-trust/source/anchors/ \
-   && update-ca-trust
+RUN hammer --fetch-ca-cert https://satellite.lab.example.com/ 
