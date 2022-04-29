@@ -1,0 +1,5 @@
+:foreman:
+   :username: 'admin'
+   :password: 'redhat'
+   :refersh_cache: false
+   :request_timeout: 120
