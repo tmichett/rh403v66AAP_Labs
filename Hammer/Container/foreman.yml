@@ -1,5 +1,6 @@
 :foreman:
    :username: 'admin'
    :password: 'redhat'
+   :host: 'https://satellite.lab.example.com
    :refersh_cache: false
    :request_timeout: 120
