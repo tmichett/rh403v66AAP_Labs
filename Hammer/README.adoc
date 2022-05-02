@@ -17,3 +17,6 @@ endif::[]
 = Hammer Resources
 
 This directory contains several files, demos, and sample commands that can be used to interact with Satellite using the Hammer CLI.
+
+
+== Sandia Demo
