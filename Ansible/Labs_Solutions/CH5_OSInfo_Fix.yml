@@ -1,0 +1,27 @@
+---
+- name: Fix CH5 GE - Administering Products and Repos
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Operations
+    org_label: Operations
+    custom_repo: Admin Tools
+    custom_product: Custom Software
+
+  tasks:
+
+    - name: Download OSInfo from Classroom
+      get_url:
+        url: http://materials.example.com/osinfo-1.0-1.el7.x86_64.rpm
+        dest: /tmp/osinfo-1.0-1.el7.x86_64.rpm
+
+    - name: "Upload my.rpm"
+      redhat.satellite.content_upload:
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        src: /tmp/osinfo-1.0-1.el7.x86_64.rpm
+        repository: "{{ custom_repo }}"
+        product: "{{ custom_product }}"
+        organization: "{{ org_name }}"
