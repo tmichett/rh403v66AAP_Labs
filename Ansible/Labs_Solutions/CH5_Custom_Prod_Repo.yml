@@ -1,0 +1,56 @@
+---
+- name: CH5 GE - Creating Custom Products and Repos
+  hosts: localhost
+  vars_files: sat_vars.yml
+  vars:
+    org_name: Operations
+    org_label: Operations
+    custom_repo: Admin Tools
+    custom_product: Custom Software
+
+  tasks:
+
+    - name: "Create {{ custom_product }} product"
+      redhat.satellite.product:
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        name: "{{ custom_product }}"
+        organization: "{{ org_name }}"
+        state: present
+
+    - name: "Create repository"
+      redhat.satellite.repository:
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        name: "{{ custom_repo }}"
+        state: present
+        content_type: "yum"
+        product: "{{ custom_product }}"
+        organization: "{{ org_name }}"
+
+
+    - name: "Download {{ item }} from Classroom"
+      get_url:
+        url: "http://materials.example.com/{{ item }}"
+        dest: "/tmp/{{ item }}"
+      loop:
+        - osinfo-db-20181011-8.el8_0.1.noarch.rpm
+        - hwinfo-21.47-9.el8.x86_64.rpm
+
+    - name: "Upload {{ item }}"
+      redhat.satellite.content_upload:
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        src: "/tmp/{{ item }}"
+        repository: "{{ custom_repo }}"
+        product: "{{ custom_product }}"
+        organization: "{{ org_name }}"
+      loop:
+        - osinfo-db-20181011-8.el8_0.1.noarch.rpm
+        - hwinfo-21.47-9.el8.x86_64.rpm

@@ -15,7 +15,7 @@
         url: http://materials.example.com/osinfo-1.0-1.el7.x86_64.rpm
         dest: /tmp/osinfo-1.0-1.el7.x86_64.rpm
 
-    - name: "Upload my.rpm"
+    - name: "Upload osinfo-1.0-1.el7.x86_64.rpm"
       redhat.satellite.content_upload:
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
