@@ -1,0 +1,4 @@
+---
+collections:
+  - name: "/tmp/redhat-satellite-3.14.0.tar.gz"
+    type: file
