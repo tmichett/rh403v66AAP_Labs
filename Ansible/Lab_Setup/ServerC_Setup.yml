@@ -22,7 +22,7 @@
       - rhel-9-for-x86_64-appstream-rpms
 
   tasks:
-    - name: Enable repositories for {{ org_name }} org
+    - name: Enable repositories for org
       redhat.satellite.repository_set:
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
@@ -33,7 +33,7 @@
           - releasever: "9"
         loop: "{{ repositories }}"
 
-    - name: Sync content for products in {{ org_name }} org
+    - name: Sync content for products in org
       redhat.satellite.repository_sync:
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
