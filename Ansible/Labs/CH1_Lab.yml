@@ -8,16 +8,8 @@
 ### This task should create the lab Organization
     - name: Create Lab Organization
 
-
 ### This task should create the lab Location(s) 
     - name: Create Lab Locations
-
-
-### This has been done for you to obtain the manifest for next task
-    - name: Download Manifest from Classroom
-      get_url:
-        url: http://materials/manifest_finance.zip
-        dest: "/tmp/manifest_finance.zip"
 
 ### This task shoud upload the manifest and set the content URL
     - name: Upload Manifest
