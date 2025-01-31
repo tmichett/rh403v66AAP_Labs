@@ -31,7 +31,7 @@
         organization: "{{ org_name }}"
         label: "{{ item }}"
         product: "{{ product_name }}"
-        repositories:
+        all_repositories: true
         state: enabled
       loop: "{{ repositories }}"
       
