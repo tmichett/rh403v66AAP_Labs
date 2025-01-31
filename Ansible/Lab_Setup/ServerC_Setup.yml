@@ -15,12 +15,32 @@
       - name: "Red Hat Enterprise Linux Server, Standard (Physical or Virtual Nodes)"
       - name: "Red Hat Satellite Infrastructure Subscription"
     organization: "{{ org_name }}"
+    product_name: Red Hat Enterprise Linux for x86_64 
     repositories:
       - satellite-client-6-for-rhel-9-x86_64-rpms
       - rhel-9-for-x86_64-baseos-rpms
       - rhel-9-for-x86_64-appstream-rpms
 
   tasks:
+    - name: Enable repositories for {{ org_name }} org
+      redhat.satellite.repository_set:
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        server_url: "{{ sat_url }}"
+        organization: "{{ org_name }}"
+        label: "{{ item }}"
+        repositories:
+          - releasever: "9"
+        loop: "{{ repositories }}"
+
+    - name: Sync content for products in {{ org_name }} org
+      redhat.satellite.repository_sync:
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        server_url: "{{ sat_url }}"
+        organization: "{{ org_name }}" 
+        product: "{{ product_name }}"
+    
     - name: Create the Finance Host Collection
       redhat.satellite.host_collection:
         name: FinanceServers
