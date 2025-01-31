@@ -27,6 +27,7 @@
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         server_url: "{{ sat_url }}"
+        validate_certs: "{{ cert_validate }}"
         organization: "{{ org_name }}"
         label: "{{ item }}"
         product: "{{ product_name }}"
@@ -38,6 +39,7 @@
         username: "{{ sat_un }}"
         password: "{{ sat_pw }}"
         server_url: "{{ sat_url }}"
+        validate_certs: "{{ cert_validate }}"
         organization: "{{ org_name }}" 
         product: "{{ product_name }}"
     
