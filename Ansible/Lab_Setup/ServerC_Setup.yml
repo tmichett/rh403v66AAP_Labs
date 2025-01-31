@@ -31,7 +31,7 @@
         label: "{{ item }}"
         repositories:
           - releasever: "9"
-        loop: "{{ repositories }}"
+      loop: "{{ repositories }}"
 
     - name: Sync content for products in org
       redhat.satellite.repository_sync:
