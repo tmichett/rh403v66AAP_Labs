@@ -5,9 +5,9 @@
   vars:
     org_name: Finance
     sat_repos:
-      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
-      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
-      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+      - Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Client 6 for RHEL 8 x86_64 (RPMs)
     activation_key: OSCAPKey
     lifecycle_env: Library
     content_view: Default Organization View
@@ -16,9 +16,9 @@
       - name: "Red Hat Satellite Infrastructure Subscription"
     organization: "{{ org_name }}"
     repositories:
-      - satellite-tools-6.6-for-rhel-8-x86_64-rpms
-      - rhel-8-for-x86_64-baseos-rpms
-      - rhel-8-for-x86_64-appstream-rpms
+      - satellite-client-6-for-rhel-9-x86_64-rpms
+      - rhel-9-for-x86_64-baseos-rpms
+      - rhel-9-for-x86_64-appstream-rpms
 
   tasks:
     - name: Create the Finance Host Collection
@@ -37,7 +37,7 @@
         name: "{{ activation_key }}"
         lifecycle_environment: "{{ lifecycle_env }}"
         content_view: "{{ content_view }}"
-        subscriptions: "{{ subscriptions }}"
+       #subscriptions: "{{ subscriptions }}"
         organization: "{{ organization }}"
         state: present
         server_url: "{{ sat_url }}"
@@ -46,17 +46,17 @@
         validate_certs: "{{ cert_validate }}"
         unlimited_hosts: yes
         host_collections: FinanceServersSCAP
-        release_version: 8.1
-        content_overrides:
-        - label: "{{ item }}"
-          override: enabled
-      loop: "{{ repositories }}"
+        release_version: 9
+       #content_overrides:
+       # - label: "{{ item }}"
+       #   override: enabled
+       #loop: "{{ repositories }}"
 
     - name: Modify {{ activation_key }} Activation Key
       redhat.satellite.activation_key:
         name: "{{ activation_key }}"
         content_overrides:
-          - label: satellite-tools-6.6-for-rhel-8-x86_64-rpms
+          - label: satellite-client-6-for-rhel-9-x86_64-rpms 
             override: enabled
         organization: "{{ organization }}"
         state: present
@@ -76,7 +76,6 @@
         locations:
           - Boston
           - Default Location
-          - Tokyo
         activation_keys: "{{ activation_key }}"
         server_url: "{{ sat_url }}"
         username: "{{ sat_un }}"
@@ -132,9 +131,9 @@
   vars:
     org_name: Finance
     sat_repos:
-      - Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
-      - Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
-      - Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)
+      - Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)
+      - Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)
+      - Red Hat Satellite Client 6 for RHEL 8 x86_64 (RPMs)
     activation_key: OSCAPKey
     lifecycle_env: Library
     Puppet_env: SCAPPuppet
