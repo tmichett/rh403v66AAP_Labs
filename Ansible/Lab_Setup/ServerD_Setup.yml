@@ -108,6 +108,11 @@
         path: /etc/sshd/sshd_config
         line: "PermitRootLogin yes"
 
+    - name: Reload sshd service
+      ansible.builtin.service:
+        name: sshd
+        state: reloaded
+
     - name: Install Katello rpm
       yum:
         name: /tmp/katello-latest.rpm
