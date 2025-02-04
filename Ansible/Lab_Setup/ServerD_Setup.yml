@@ -103,6 +103,11 @@
         dest: /tmp/katello-latest.rpm
         validate_certs: no
 
+    - name: Allow root login via SSH
+      ansible.builtin.lineinfile:
+        path: /etc/sshd/sshd_config
+        line: "PermitRootLogin yes"
+
     - name: Install Katello rpm
       yum:
         name: /tmp/katello-latest.rpm
