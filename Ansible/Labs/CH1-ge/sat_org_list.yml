@@ -1,0 +1,18 @@
+---
+- name: Demo to List Organizations
+  hosts: localhost
+  vars_files: sat_vars.yml
+
+  tasks:
+    - name: List Satellite Organizations
+      redhat.satellite.organization_info:
+        server_url: "{{ sat_url }}"
+        username: "{{ sat_un }}"
+        password: "{{ sat_pw }}"
+        validate_certs: "{{ cert_validate }}"
+        search: " "
+      register: sat_orgs
+
+    - name: Print List of Satellite Organizations
+      ansible.builtin.debug:
+        msg: The Satellite organization names are {{ sat_orgs['organizations'] | map(attribute='name') | list }}
